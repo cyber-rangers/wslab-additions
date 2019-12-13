@@ -1,0 +1,20 @@
+# Requirements VBS
+Intel VT-d2 (IOMMU) ~ DMA
+TPM 2.0
+EFI 2.3.1c
+Native + Secure Boot
+
+# Windows Defender Application Control (+ HVCI)
+New-CIPolicy -ScanPath C:\ -Level PcaCertificate -FilePath C:\policy.xml
+ConvertFrom-CIPolicy C:\policy.xml C:\policy.bin
+copy-item C:\policy.bin C:\windows\system32\CodeIntegrity\sipolicy.p7b
+#restart OS
+New-CIPolicy -Audit -FilePath C:\upr-policy.xml -Level PcaCertificate -Fallback Hash
+ConvertFrom-CIPolicy C:\upr-policy.xml C:\upr-policy.bin
+copy-item C:\upr-policy.bin C:\windows\system32\CodeIntegrity\sipolicy.p7b
+#restart
+Set-RuleOption -FilePath C:\upr-policy.xml -Option 3 -Delete
+ConvertFrom-CIPolicy C:\upr-policy.xml C:\upr-policy.bin
+copy-item C:\upr-policy.bin C:\windows\system32\CodeIntegrity\sipolicy.p7b
+#restart
+#good luck

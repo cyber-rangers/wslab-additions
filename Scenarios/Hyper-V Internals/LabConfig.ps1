@@ -1,0 +1,6 @@
+﻿$LabConfig=@{ DomainAdminName='CorpAdmin'; AdminPassword='P@ssw0rd'; DomainName='cyber-rangers.lab'; DomainNetbiosName='RANGERS'; DefaultOUName="Lab"; Prefix = 'GOC207-'; SwitchName = 'LabSwitch'; DCEdition='4'; Internet=$true ; AdditionalNetworksConfig=@(); VMs=@()}
+
+$LabConfig.VMs += @{ VMName = 'Win10' ; Configuration = 'Simple' ; ParentVHD = 'Win1019H1_G2.vhdx'  ; MemoryStartupBytes= 2GB ; MemoryMinimumBytes=1GB; AddToolsVHD=$True ; DisableWCF=$True }
+$LabConfig.VMs += @{ VMName = 'Management' ; Configuration = 'Simple' ; ParentVHD = 'Win2019_G2.vhdx'  ; MemoryStartupBytes= 2GB ; MemoryMinimumBytes=1GB; AddToolsVHD=$True ; DisableWCF=$True }
+1..3 | % { $VMNames="HGS" ; $LABConfig.VMs += @{ VMName = "$VMNames$_" ; Configuration = 'Simple'   ; ParentVHD = 'Win2019_G2.vhdx'    ; MemoryStartupBytes= 1GB ; MemoryMinimumBytes=1GB; Unattend="NoDjoin" ; vTPM=$True ; MGMTNICs=1 } }
+1..4 | % { $VMNames="Compute" ; $LABConfig.VMs += @{ VMName = "$VMNames$_" ; Configuration = 'Simple'   ; ParentVHD = 'Win2019_G2.vhdx'    ; MemoryStartupBytes= 4GB ; StaticMemory=$true; NestedVirt=$True ; vTPM=$True } }

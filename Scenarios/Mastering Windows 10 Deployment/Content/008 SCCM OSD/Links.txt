@@ -1,0 +1,2 @@
+# SCCM Task Sequence Variables
+https://docs.microsoft.com/cs-cz/sccm/osd/understand/task-sequence-variables

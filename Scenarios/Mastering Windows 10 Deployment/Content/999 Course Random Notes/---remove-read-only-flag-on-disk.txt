@@ -1,0 +1,5 @@
+diskpart
+
+select disk 1
+
+attributes disk clear readonly

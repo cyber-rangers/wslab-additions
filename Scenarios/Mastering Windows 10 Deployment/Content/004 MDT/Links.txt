@@ -1,0 +1,11 @@
+# MDT toolkit reference (help)
+https://docs.microsoft.com/en-us/sccm/mdt/toolkit-reference
+
+# MDT get started
+https://docs.microsoft.com/en-us/windows/deployment/deploy-windows-mdt/get-started-with-the-microsoft-deployment-toolkit
+
+# MDT properties (customsettings.ini, bootstrap.ini)
+https://docs.microsoft.com/en-us/sccm/mdt/toolkit-reference#property-definition
+
+# Windows 10 PoC MDT
+https://docs.microsoft.com/en-us/windows/deployment/windows-10-poc-mdt

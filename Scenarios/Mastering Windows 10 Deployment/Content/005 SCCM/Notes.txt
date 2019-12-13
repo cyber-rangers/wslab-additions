@@ -1,0 +1,2 @@
+# Extend AD Schema
+ldifde -i -f C:\ConfigMgr_ad_schema.ldf -v -j C:\Logs

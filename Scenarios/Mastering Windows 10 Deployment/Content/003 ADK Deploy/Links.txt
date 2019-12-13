@@ -1,0 +1,8 @@
+#modify taskbar pinned applications
+https://docs.microsoft.com/en-us/windows/configuration/configure-windows-10-taskbar#sample-taskbar-configuration-added-to-start-layout-xml-file
+
+# Manual Windows deployment
+   * UEFI/GPT-based hard drive partitions https://technet.microsoft.com/en-us/windows/dn898510(v=vs.60)
+   * Capture and Apply Windows, System, and Recovery Partitions https://technet.microsoft.com/en-us/windows/dn898498(v=vs.60)
+   * Deploy Windows using Full Flash Update (FFU) https://technet.microsoft.com/en-us/windows/dn940130(v=vs.60)
+   * Apply Images Using DISM https://technet.microsoft.com/en-us/windows/dn898483(v=vs.60)

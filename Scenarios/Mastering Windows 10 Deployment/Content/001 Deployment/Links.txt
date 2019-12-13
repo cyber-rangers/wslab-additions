@@ -1,0 +1,4 @@
+# Links
+
+## Windows 10 Deployment Scenarios
+https://docs.microsoft.com/en-us/windows/deployment/windows-10-deployment-scenarios

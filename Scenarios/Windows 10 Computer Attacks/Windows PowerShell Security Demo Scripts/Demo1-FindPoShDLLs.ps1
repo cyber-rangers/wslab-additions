@@ -1,0 +1,1 @@
+﻿Get-ChildItem -path C:\ *.dll -Recurse -ErrorAction Ignore | Select-Object -ExpandProperty FullName | where-object { $_ -match 'System\.Management\.Automation\.(ni\.)?dll' }
